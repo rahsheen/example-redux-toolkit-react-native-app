@@ -10,41 +10,41 @@
 'use strict';
 
 import React from 'react';
-import {Image, StyleSheet} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {Image, View, useWindowDimensions, StyleSheet} from 'react-native';
 
-const Header = () => (
-  <>
-    <Image accessibilityRole={'image'} source={require('./logo.gif')} />
-  </>
-);
+const useViewportUnits = () => {
+  const {width, height} = useWindowDimensions();
+
+  const vh = height / 100;
+  const vw = width / 100;
+
+  return {vh, vw};
+};
+
+const Header = () => {
+  const {vh} = useViewportUnits();
+
+  const logoStyle = {
+    height: 40 * vh,
+  };
+
+  return (
+    <View style={styles.container}>
+      <Image
+        accessibilityRole={'image'}
+        source={require('./logo.gif')}
+        style={logoStyle}
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-  background: {
-    paddingBottom: 40,
-    paddingTop: 96,
-    paddingHorizontal: 32,
-    backgroundColor: Colors.lighter,
-  },
-  logo: {
-    opacity: 0.2,
-    overflow: 'visible',
-    resizeMode: 'cover',
-    /*
-     * These negative margins allow the image to be offset similarly across screen sizes and component sizes.
-     *
-     * The source logo.png image is 512x512px, so as such, these margins attempt to be relative to the
-     * source image's size.
-     */
-    marginLeft: -64,
-    marginBottom: -128,
-  },
-  text: {
-    fontSize: 40,
-    fontWeight: '600',
-    textAlign: 'center',
-    color: Colors.black,
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    backgroundColor: 'white',
   },
 });
-
 export default Header;
