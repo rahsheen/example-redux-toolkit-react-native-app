@@ -9,8 +9,8 @@
 
 'use strict';
 
-import React from 'react';
-import {Image, View, useWindowDimensions, StyleSheet} from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {Animated, StyleSheet, useWindowDimensions, View} from 'react-native';
 
 const useViewportUnits = () => {
   const {width, height} = useWindowDimensions();
@@ -21,19 +21,45 @@ const useViewportUnits = () => {
   return {vh, vw};
 };
 
+const useBounceAnimation = (value = 10) => {
+  const bounce = useRef(new Animated.Value(0)).current;
+
+  bounce.interpolate({
+    inputRange: [-300, -100, 0, 100, 101],
+    outputRange: [300, 0, 1, 0, 0],
+  });
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(bounce, {
+          toValue: value,
+          duration: 1500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(bounce, {
+          toValue: 0,
+          duration: 1500,
+          useNativeDriver: true,
+        }),
+      ]),
+    ).start();
+  }, [bounce, value]);
+
+  return bounce;
+};
+
 const Header = () => {
   const {vh} = useViewportUnits();
-
-  const logoStyle = {
-    height: 40 * vh,
-  };
+  const bounce = useBounceAnimation();
+  const height = 40 * vh;
 
   return (
     <View style={styles.container}>
-      <Image
+      <Animated.Image
         accessibilityRole={'image'}
         source={require('./logo.gif')}
-        style={logoStyle}
+        style={{height, transform: [{translateY: bounce}]}}
       />
     </View>
   );
@@ -41,7 +67,6 @@ const Header = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     backgroundColor: 'white',
