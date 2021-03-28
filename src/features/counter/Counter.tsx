@@ -21,6 +21,7 @@ export function Counter() {
 
   // The `state` arg is correctly typed as `RootState` already
   const count = useAppSelector(selectCount);
+  const status = useAppSelector((state) => state.counter.status);
   const dispatch = useAppDispatch();
 
   return (
@@ -55,6 +56,7 @@ export function Counter() {
           </TouchableOpacity>
           <AsyncButton
             style={styles.button}
+            disabled={status !== 'idle'}
             onPress={() =>
               dispatch(incrementAsync(Number(incrementAmount) || 0))
             }>

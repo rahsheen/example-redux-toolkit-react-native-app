@@ -9,7 +9,12 @@ import {
   ViewStyle,
 } from 'react-native';
 
-export function AsyncButton({onPress, style, children}: PressableProps) {
+export function AsyncButton({
+  onPress,
+  style,
+  children,
+  ...restProps
+}: PressableProps) {
   const progress = useRef(new Animated.Value(0)).current;
   const opacity = useRef(new Animated.Value(1)).current;
 
@@ -49,7 +54,7 @@ export function AsyncButton({onPress, style, children}: PressableProps) {
   };
 
   return (
-    <Pressable style={style} onPress={_onPress}>
+    <Pressable style={style} onPress={_onPress} {...restProps}>
       <View style={StyleSheet.absoluteFill}>
         <Animated.View style={[styles.progress, progressStyle]} />
       </View>
