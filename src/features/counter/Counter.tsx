@@ -1,12 +1,4 @@
 import React, {useState} from 'react';
-import {useAppSelector, useAppDispatch} from '../../app/hooks';
-import {
-  decrement,
-  increment,
-  incrementByAmount,
-  incrementAsync,
-  selectCount,
-} from './counterSlice';
 import {
   StyleSheet,
   Text,
@@ -14,6 +6,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {useAppDispatch, useAppSelector} from '../../app/hooks';
+import {AsyncButton} from '../../components/AsyncButton';
+import {
+  decrement,
+  increment,
+  incrementAsync,
+  incrementByAmount,
+  selectCount,
+} from './counterSlice';
 
 export function Counter() {
   const [incrementAmount, setIncrementAmount] = useState('2');
@@ -52,13 +53,13 @@ export function Counter() {
             }>
             <Text style={styles.buttonText}>Add Amount</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          <AsyncButton
             style={styles.button}
             onPress={() =>
               dispatch(incrementAsync(Number(incrementAmount) || 0))
             }>
             <Text style={styles.buttonText}>Add Async</Text>
-          </TouchableOpacity>
+          </AsyncButton>
         </View>
       </View>
     </View>
